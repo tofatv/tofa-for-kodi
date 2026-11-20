@@ -140,17 +140,12 @@ A background task keeps it inside the limit on its own, so neither
 control is something you need to visit.
 
 
-Unofficial
------------
+About this add-on
+-----------------
 
-This is an unofficial tofa client, engineered with the tofa team, who
-also help support it.
-
-Unofficial means it is not a tofa product and carries no guarantee from
-them. It is not built in isolation either: the tofa team helped engineer
-it and has agreed to provide some support for it (2026-08-03). Settings
--> Privacy & About shows the same statement, and the Report a Problem
-code on that page is the route to that support.
+tofa for Kodi was created by community member cinemaONE and donated to
+tofa. Settings -> Privacy & About shows the same note, and the Report a
+Problem code on that page leads to the add-on's issue tracker.
 
 See LICENSE.txt for this add-on's own license (GPL-2.0-only). That licence
 is a condition of the ported code credited below, not an independent
@@ -177,8 +172,7 @@ both described under "What this add-on changes outside itself" below.
 Trademarks
 ----------
 
-"tofa" is used with the tofa team's agreement, as are the fox marks; this
-remains an unofficial client, and the name is theirs.
+"tofa" and the fox marks belong to tofa.
 
 Dolby, Dolby Vision, Dolby Atmos and TrueHD are trademarks of Dolby
 Laboratories. DTS, DTS-HD and DTS:X are trademarks of DTS, Inc. Kodi is

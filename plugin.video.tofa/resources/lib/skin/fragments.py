@@ -5978,7 +5978,7 @@ def settings_name_row(*, posy: int, title: str, subtitle: tuple[str, ...],
     measured split it chose and why it was rejected. Callers own the break, so
     it can be balanced.
 
-    Written for ABOUT's "tofa for Kodi" over its unofficial-status note, and
+    Written for ABOUT's "tofa for Kodi" over its credit note, and
     shares a card with the Version row below it the way Server shares one with
     Libraries -- hence the same `card_height` escape hatch."""
     TEXT_X = 27

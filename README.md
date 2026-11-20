@@ -1,7 +1,6 @@
 # tofa for Kodi
 
-An unofficial Kodi client for the [tofa](https://tofa.tv) media server, in
-two parts.
+The Kodi client for the [tofa](https://tofa.tv) media server, in two parts.
 
 Under **Programs**, `tofa` opens a complete television interface: Home,
 Browse, Discover, Search, title detail with cast and episodes, its own player
@@ -11,8 +10,8 @@ containers. Both play through Kodi's native VideoPlayer, negotiating
 DirectPlay/DirectFile so Dolby Vision, TrueHD/DTS-HD passthrough and
 refresh-rate matching reach it untouched.
 
-Unofficial means it is not a tofa product and carries no guarantee from them,
-though it is built with the tofa team and against their design.
+tofa for Kodi was created by community member cinemaONE and donated to
+tofa. Thank you, cinemaONE, for building it and handing it on.
 
 **It is no longer beta.** Version 1.0 shipped in October 2026, and development
 continues: new releases follow the tofa apps' own features. If something is
@@ -26,7 +25,7 @@ Add the repository once and Kodi keeps the add-on updated on its own:
    to install from a zip without it, and only says so when you try.
 2. Settings → File manager → Add source → `https://kodi.tofa.tv`
    Kodi cannot guess a name for an `https` source and will not accept an
-   empty one — call it **tofa**.
+   empty one, so call it **tofa**.
 3. Settings → Add-ons → Install from zip file → **tofa** →
    `repository.tofa-1.0.2.zip`
 4. Install from repository → tofa Add-on Repository → Video add-ons →
@@ -140,7 +139,7 @@ a subset under MIT). Inter Tight and Roboto Mono ship under the SIL Open Font
 License. The full notices travel with the files they cover, under
 `plugin.video.tofa/resources/skins/Main/`.
 
-The fox marks and the tofa name are tofa's, used with their agreement.
+The fox marks and the tofa name are tofa's.
 
 This project is written with AI assistance, and says so rather than leaving
 it to be inferred.

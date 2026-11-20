@@ -1055,8 +1055,8 @@ def render_main() -> str:
             # be a literal here, and addon.xml said "tofa" while this card
             # said "tofa for Kodi" -- the exact drift a second copy invites.
             title=branding.app_name(),
-            subtitle=("An unofficial tofa client, engineered with the tofa team,",
-                      "who also help support it"),
+            subtitle=("Created by community member cinemaONE",
+                      "and donated to tofa"),
             width=T.SETTINGS_DETAIL_W, card_height=T.SETTINGS_ABOUT_CARD_H,
             indent="                        "),
         settings_version_row=fragments.settings_value_row(

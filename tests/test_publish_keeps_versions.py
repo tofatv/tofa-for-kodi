@@ -37,7 +37,7 @@ def check(name, ok, detail=""):
 
 
 ADDON_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tofa" name="tofa for Kodi" version="{v}" provider-name="cinemaONE">
+<addon id="plugin.video.tofa" name="tofa for Kodi" version="{v}" provider-name="tofa">
     <extension point="xbmc.addon.metadata">
         <summary>t</summary>
     </extension>
