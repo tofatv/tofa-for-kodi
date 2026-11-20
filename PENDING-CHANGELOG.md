@@ -9,12 +9,11 @@ release.
 
 ## At release time
 
-1. `python3 tools/release.py set <v>` (bumps `addon.xml`).
-2. Paste the block below at the TOP of `plugin.video.tofa/changelog.txt`
+1. Paste the block below at the TOP of `plugin.video.tofa/changelog.txt`
    under a `<v>` heading.
-3. `python3 tools/release.py sync`. `<news>` is DERIVED from the changelog
-   and is never hand-edited.
-4. Delete the entry from this file once it has shipped.
+2. `python3 tools/release.py set <v>`, which refuses without that entry,
+   bumps `addon.xml` and re-derives `<news>` (never hand-edited).
+3. Delete the entry from this file once it has shipped.
 
 The rest of the procedure is under "Cutting a release" in `CONTRIBUTING.md`.
 
