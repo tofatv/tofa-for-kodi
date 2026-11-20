@@ -1,0 +1,3 @@
+- tofa for Kodi is now published by tofa. It was created by community
+  member cinemaONE, who donated it to tofa: thank you.
+- Updates now come from https://kodi.tofa.tv.
