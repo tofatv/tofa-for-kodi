@@ -16,7 +16,7 @@ though it is built with the tofa team and against their design.
 
 **It is no longer beta.** Version 1.0 shipped in October 2026, and development
 continues: new releases follow the tofa apps' own features. If something is
-wrong, please [report it](https://github.com/cinema-ONE/tofa-for-kodi/issues).
+wrong, please [report it](https://github.com/tofatv/tofa-for-kodi/issues).
 
 ## Install
 
