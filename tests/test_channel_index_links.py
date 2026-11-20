@@ -19,7 +19,7 @@ file"). That caches a listing which -- while `addons.xml` and its sidecar
 were unlinked -- contained only the repository zip. The repository then could
 not read its own index:
 
-    error: CRepository: failed read 'https://tofa.cinemaone.ch/addons.xml.sha256'
+    error: CRepository: failed read 'https://kodi.tofa.tv/addons.xml.sha256'
 
 one millisecond after asking, with no `CurlFile::Open` line at all. A Kodi
 restart cleared the cache and it worked, which is exactly why it looked

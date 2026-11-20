@@ -45,7 +45,7 @@ along with Kodi's cached copy of the add-on list, so the reinstall starts over.
 1. **Settings** → **Add-ons** → **My add-ons** → **Add-on repository** →
    **tofa Add-on Repository**
 2. **Uninstall**, and confirm
-3. Install it again from https://tofa.cinemaone.ch, as in the README's install
+3. Install it again from https://kodi.tofa.tv, as in the README's install
    steps
 
 This removes only the repository, not the add-on: your sign-in and settings are
@@ -81,7 +81,7 @@ https://github.com/cinema-ONE/tofa-for-kodi/releases -- install that with
 A last resort, for when the repository can't be reached at all, or when you
 need one specific version.
 
-1. Download `plugin.video.tofa-<version>.zip` from https://tofa.cinemaone.ch
+1. Download `plugin.video.tofa-<version>.zip` from https://kodi.tofa.tv
 2. **Settings** → **System** → **Add-ons** → turn on **Unknown sources**.
    Kodi refuses to install from a zip without it, and only says so when you try
 3. **Settings** → **Add-ons** → **Install from zip file** → choose the file
