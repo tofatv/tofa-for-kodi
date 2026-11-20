@@ -60,7 +60,7 @@ Both play through Kodi's native VideoPlayer, negotiating DirectPlay/DirectFile s
       <screenshot>resources/screenshots/05-player.jpg</screenshot>
       <screenshot>resources/screenshots/06-settings.jpg</screenshot>
     </assets>
-  <size>8778269</size><path>plugin.video.tofa/plugin.video.tofa-1.5.1.zip</path></extension>
+  <size>8778282</size><path>plugin.video.tofa/plugin.video.tofa-1.5.1.zip</path></extension>
 </addon>
 <addon id="plugin.video.tofa" name="tofa for Kodi" version="1.5.0" provider-name="cinemaONE">
   <requires>
