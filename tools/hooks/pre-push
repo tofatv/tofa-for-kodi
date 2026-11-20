@@ -1,49 +1,10 @@
 #!/bin/sh
-# Refuse to push a tree, or a commit message, that reproduces tofa's prose.
+# Refuse to push a tree or a commit message that names something private,
+# or a message over check_brevity.py's limits. A pushed message cannot be
+# taken back: a rewrite leaves GitHub serving the old commit by SHA.
 #
-# CI cannot do this. `check_public_set.py` compares this tree against tofa's
-# private documents, and those must never reach a runner, so the workflow runs
-# only its `--markers` half. The QUOTE half therefore has no automatic home --
-# and it went red from 2026-08-16 to 2026-08-29 with nobody noticing, because
-# a manual check is a check nobody runs. Two comments quoted 13 tokens of
-# TV-DESIGN.md and shipped in every release from 0.9.3 on.
-#
-# Push is the moment the prose stops being ours, which makes it the right
-# place: one second and a half, and a quotation caught here never reaches a
-# public history.
-#
-# "Never reaches" is the whole value, and it is not a figure of speech. On
-# 2026-09-20 one got through, was force-pushed out of `main`, and GitHub went
-# on serving it anyway -- from the orphaned commit by SHA, and from
-# `refs/pull/N/head`, which renders on the pull request's Commits tab. A
-# rewrite pays the full cost and removes nothing. THIS is the last cheap
-# moment.
-#
-# THE MESSAGE HALF, added 2026-09-20, after the same thing happened one layer
-# up: the tree gate caught two of tofa's sentences, they were paraphrased, and
-# the commit was re-made with `--amend --no-edit` -- which keeps the ORIGINAL
-# message. Both sentences were still in it, and it passed this hook twice.
-#
-# git hands a pre-push hook the exact refs it is about to send, AND what the
-# remote currently has for each one, so this passes the exact commits rather
-# than a rolling guess: a long branch is covered whole, and a message that is
-# already public is not re-reported at every push when nothing can be done
-# about it. The exclusion uses the remote sha git supplies rather than
-# `--remotes=origin`, because remote-tracking refs go stale -- after a delete
-# or a force-push they can claim the remote still has a commit it does not,
-# and the value on stdin is the one git is about to negotiate with.
-# Annotated tag messages are scanned every run regardless -- they go out with
-# `--tags` and nobody thinks about them.
-#
-# WHAT THIS DOES NOT COVER: anything that reaches GitHub through the API
-# rather than through git -- a pull request title or body, an issue, a
-# comment, a release note. Those go through `tools/gh_gate.py`, which is the
-# same gate in front of `gh`. `release.py publish` runs this checker too, as
-# the backstop for a push that got through with --no-verify.
-#
-# A checkout with NO vault beside it fails here, deliberately. The checker
-# treats "compared against nothing" as a failure, not a pass. Set TOFA_VAULT
-# if yours lives somewhere unguessable.
+# git hands the hook each ref with what the remote already has, so exactly
+# the commits being sent are checked.
 #
 # Install:  git config core.hooksPath tools/hooks
 
@@ -75,18 +36,9 @@ fi
 
 if ! python3 "$root/tools/check_public_set.py" "$@"; then
     echo
-    echo "pre-push: NOT pushing -- a file or a commit message quotes tofa's"
-    echo "documents, or the gate had nothing to compare it against."
-    echo
-    echo "Paraphrase the run it names. If the run is in a MESSAGE, reword it"
-    echo "with \`git rebase\` or \`filter-branch --msg-filter\` -- \`--amend"
-    echo "--no-edit\` keeps the very message you are trying to change. Do it"
-    echo "NOW: once pushed, a rewrite cleans your branch and leaves GitHub"
-    echo "serving the old commit by SHA and on the PR's Commits tab."
-    echo
-    echo "Or set TOFA_VAULT if the vault is somewhere this could not find it."
-    echo "\`git push --no-verify\` overrides, and \`release.py publish\` will"
-    echo "catch it again if you do."
+    echo "pre-push: NOT pushing -- a file or a commit message names something"
+    echo "private. If it is in a MESSAGE, reword it with \`git rebase\`;"
+    echo "\`--amend --no-edit\` keeps the very message you are trying to change."
     exit 1
 fi
 

@@ -1,7 +1,6 @@
 """Generates the poster-card assets for the Apple-TV-matching redesign:
 rounded corners, a track-less progress bar with a rounded left cap, and a
-soft focus glow -- tracked as not-real-designed-assets on
-https://github.com/cinema-ONE/tofa-vault/issues/6.
+soft focus glow. They are stand-ins, not final designed assets.
 
 Dev-only tool (needs Pillow, which Kodi's own Python environment doesn't
 have) -- run by hand when one of these needs tweaking, output goes

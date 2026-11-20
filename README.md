@@ -73,42 +73,19 @@ Two things are worth knowing before reading much of it.
 generated file digests every skin input, so one source edit rotates the stamp
 in all of them.
 
-**The documents these comments cite are not here, and never will be.**
-Comments across the code point at a design spec by section ("9.4's fox
-tile"), and at several documents by name: `TV-DESIGN.md`, `ANIMATION.md`,
-`DIVERGENCES.md`, `tofa UX/styleguide.md`, `addon-tofa-brief.md`, the
-vendored OpenAPI spec, and `internal-docs/atv-reference/*.png` captures.
-They are tofa's internal TV design document, the reference captures taken
-from tofa's own apps, and our working notes on both. All of them are
-confidential and live in a private sibling checkout. A missing file is the
-intended state, not an incomplete clone.
+**The documents these comments cite are not here.** Comments across the
+code point at a design spec by section ("9.4's fox tile") and at documents by
+name: `TV-DESIGN.md`, `ANIMATION.md`, `DIVERGENCES.md`,
+`tofa UX/styleguide.md`, `addon-tofa-brief.md`, the OpenAPI spec, and
+`internal-docs/atv-reference/*.png` captures. They are tofa's private design
+material and working notes, so a missing file is the intended state, not an
+incomplete clone. The pointers stay because they make the code navigable;
+the documents' wording is never quoted.
 
-The pointers stay because they are what makes the code navigable. What may
-not travel is a private document's *wording*, and `tools/check_public_set.py`
-gates on it. It indexes every eight-token run of each private source and
-sweeps this file set; it runs that same sweep over commit messages and
-annotated tags; `tools/gh_gate.py` puts it in front of `gh` so a pull
-request, an issue or a release note is read before it is posted; and it flags
-any three-word phrase a comment puts in quotation marks that appears verbatim
-in one of tofa's documents. The rule is that nothing becomes public except
-through a tool that gated it, because a public surface cannot be taken back
--- rewriting history removes it from the branch and leaves GitHub serving it.
-
-**Nothing is quoted from them at all.** Earlier this arrangement allowed a
-handful of short quoted lines, credited to their section. That was tofa's to
-allow and they had allowed it, but a threshold that permits a little is a
-threshold somebody has to keep judging, and in practice it drifted: quoted
-spec lines accumulated across the tree, every one under the limit, and a
-thirteen-word run went unnoticed for a fortnight because the surrounding
-habit made it look normal. So the rule is now the simple one. Say what the
-section requires in our own words, cite the section, and let anyone who
-holds the document check us against it.
-
-The exception is text this app puts on a screen and values a server sends on
-the wire. tofa's design document contains "Mark as Watched" for the same
-reason our code does, and a comment that cannot name the row it is about is
-not a comment. Those are allowlisted by name in the checker, so a new one
-has to be added on purpose.
+Nothing becomes public except through a tool that gated it:
+`tools/hooks/pre-push` and `tools/gh_gate.py` run `tools/check_public_set.py`
+over every push, pull request, issue and release note, because a public
+surface cannot be taken back.
 
 ## Development
 

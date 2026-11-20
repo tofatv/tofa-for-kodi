@@ -36,15 +36,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import checkouts  # noqa: E402  (sibling module in tools/)
-
-#: The add-on tree, wherever it is. This tool stays in the vault when the
-#: add-on moves to its own public repo, so it has to look next door.
-ADDON = checkouts.addon_dir(ROOT)
-if not ADDON:
-    raise SystemExit("cannot find plugin.video.tofa/ -- check it out beside "
-                     "this repo, or set TOFA_ADDON_REPO")
+ADDON = os.path.join(ROOT, "plugin.video.tofa")
 
 LIB = os.path.join(ADDON, "resources", "lib")
 
