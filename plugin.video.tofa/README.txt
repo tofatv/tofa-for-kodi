@@ -70,11 +70,11 @@ The update channel is a repository add-on you install once:
      refuses to install from a zip without it, and says so only when you
      try.
   2. Settings -> File manager -> Add source
-         https://tofa.cinemaone.ch
+         https://kodi.tofa.tv
      Kodi cannot guess a name for an https source and will not accept an
      empty one. Call it "tofa".
   3. Settings -> Add-ons -> Install from zip file -> tofa ->
-     repository.tofa-1.0.1.zip
+     repository.tofa-1.0.2.zip
   4. Settings -> Add-ons -> Install from repository ->
      tofa Add-on Repository -> Video add-ons -> "tofa for Kodi"
   5. Start it from Kodi's home menu -> Add-ons -> Program add-ons ->

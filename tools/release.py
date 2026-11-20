@@ -134,35 +134,20 @@ REPO_NAME = "tofa Add-on Repository"
 # install stuck on it cannot learn about this one either -- it has to be
 # reinstalled by hand -- but the bump is what lets every install that CAN
 # read the index replace 1.0.0 without being asked.
-REPO_VERSION = "1.0.1"
+#
+# 1.0.1 -> 1.0.2: the channel moved to kodi.tofa.tv when the project passed
+# to tofa. Installs on 1.0.1 learn the new URL only from the old one.
+REPO_VERSION = "1.0.2"
 REPO_SUMMARY = "Install and update the tofa add-on"
 REPO_DESCRIPTION = (
     "The update channel for tofa's Kodi add-on. Installing this repository "
     "lets Kodi fetch the add-on and every later release on its own."
 )
-#: Where the tree below will be served from, no trailing slash.
-#:
-#: Settled 2026-08-12 (issue #5): the update channel is OURS, not a tofa.tv
-#: URL -- tofa would rather not put their domain in front of a channel they
-#: do not operate. The bits come from GitHub Pages out of this repo's `docs/`
-#: folder; the hostname is only a DNS CNAME pointing at `cinema-one.github.io`.
-#:
-#: A domain we own rather than `cinema-one.github.io/tofa-for-kodi`, decided
-#: 2026-08-15 before the first publish, and the reason is portability rather
-#: than looks: this string is baked into every repository zip a box installs,
-#: so a `github.io` URL would tie the channel to GitHub Pages permanently.
-#: Behind a domain we control, the host can move by repointing DNS and no
-#: install notices. It is the one part of this that cannot be retrofitted
-#: cheaply. plex-for-kodi does the same thing with pm4k.eu.
-#:
-#: The cost is a renewal obligation: if the domain ever lapses, every install's
-#: update channel dies and whoever registers it next can serve code to those
-#: boxes. Keep it, and keep it verified on the GitHub account so a dangling
-#: CNAME cannot be claimed by another user.
-#:
-#: Changing this later means every existing user has to remove and re-add the
-#: repository, so bump REPO_VERSION with it (see the module docstring).
-BASE_URL = "https://tofa.cinemaone.ch"
+#: Where the tree below is served from, no trailing slash. GitHub Pages
+#: serves `docs/` on `main`; the hostname is a DNS CNAME onto the org's
+#: `github.io`. A domain rather than a `github.io` URL, so the host can move
+#: without every install re-adding the repository. Bump REPO_VERSION with it.
+BASE_URL = "https://kodi.tofa.tv"
 #: What Kodi hashes. `true` means md5, which current Kodi logs as broken.
 HASH_ALGO = "sha256"
 REPO_OUT = os.path.join(DIST, "repo")
@@ -1214,7 +1199,7 @@ def do_publish(base_url: str | None, out_dir: str,
     if not base_url:
         print("publish needs the URL this tree will be served from, e.g.\n"
               "    python3 tools/release.py publish --base-url "
-              "https://tofa.cinemaone.ch\n"
+              "https://kodi.tofa.tv\n"
               "It is baked into the repository add-on users install, so there "
               "is no safe default to guess. BASE_URL is normally set.")
         return 1
