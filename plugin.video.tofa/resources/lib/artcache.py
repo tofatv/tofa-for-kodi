@@ -258,8 +258,7 @@ PREFETCH_TIMEOUT_S = 3.0
 #: Not a setting, deliberately: there is one right answer per device, and the
 #: one to tune for is the constrained one -- the cinema box draws 4K on
 #: littler cores than anything else here, so a value that suits it cannot
-#: hurt a desktop. Re-run the sweep (the vault's tools/probe_cdn.py) if the
-#: hardware changes; do not guess.
+#: hurt a desktop. Re-measure if the hardware changes; do not guess.
 PREFETCH_WORKERS = 4
 
 

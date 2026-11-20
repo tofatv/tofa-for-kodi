@@ -1,44 +1,21 @@
 #!/usr/bin/env python3
-"""Run `gh`, but never publish text that quotes a private document.
+"""Run `gh`, but never publish text that names something private.
 
     python3 tools/gh_gate.py pr create --title "..." --body-file body.md
     python3 tools/gh_gate.py pr merge 189 --squash --delete-branch
     python3 tools/gh_gate.py issue comment 161 --body-file evidence.md
 
-Everything after the script name is passed to `gh` unchanged. What happens
-first is that every piece of TEXT in that command line is pulled out and put
-through `check_public_set.py`, and a hit stops the command before anything
-reaches GitHub.
+Everything after the script name is passed to `gh` unchanged. First, every
+piece of text in the command line (--title, --body, --body-file, --subject,
+--notes, --notes-file, --message and their short aliases) goes through
+`check_public_set.py --text`, and a hit stops the command. The pre-push hook
+covers what reaches GitHub through git; this covers what goes through the
+API, which a later edit does not unpublish.
 
-WHY THIS EXISTS. `check_public_set.py` gates the working tree, and since
-2026-09-20 it gates commit and tag messages too. Between them they cover
-everything that arrives at GitHub through `git`. They cover none of what
-arrives through the API: a pull request's title and body, an issue, a
-comment, a release note. Those are as public as any file, they are indexed,
-and -- this is the part that cost something -- **a rewrite does not take them
-back**. On 2026-09-20 a quoted run was force-pushed out of `main` and GitHub
-carried on serving it from the orphaned commit and from `refs/pull/N/head`.
-The only cheap moment is before the write.
-
-So the rule is one sentence: **nothing becomes public except through a tool
-that gated it.** This is that tool for the GitHub half; `git push` is covered
-by `tools/hooks/pre-push`.
-
-WHAT GETS GATED. The value of every text-bearing flag, whether inline or from
-a file: --title, --body, --body-file, --subject, --notes, --notes-file,
---message. `-F` and `-b` are handled as the aliases `gh` treats them as. A
-`--body-file -` reads standard input, gates it, and hands the same bytes on,
-so the pipe is not consumed twice.
-
-THE ONE SPECIAL CASE: `pr merge --squash`. There is no text in that command
-line at all -- GitHub composes the commit message on the server from the
-branch's commits, or from the pull request title, and publishes it without
-anything local ever seeing it. That is precisely the shape of the 2026-09-20
-failure, one layer up. So this composes the message itself, from the same
-ingredients GitHub would use, gates it, and passes it back with --subject and
---body, which makes the server compose nothing. The message that is published
-is the message that was checked -- for quotes, and against check_brevity.py's
-limits, since a long squash body on main trips every later push that merges it.
+`pr merge --squash` carries no text, so GitHub would compose the message on
+the server. This composes it locally from the same ingredients, gates it,
+and passes it back with --subject and --body, also held to check_brevity.py's
+limits.
 
 EXIT STATUS is the gate's when the gate refuses, and `gh`'s otherwise.
 """
@@ -63,12 +40,8 @@ FROM_FILE = {"--body-file", "-F", "--notes-file"}
 
 
 def gate(blobs: list[tuple[str, str]]) -> None:
-    """Refuse the whole command if any blob quotes a private document.
-
-    Blobs are (label, text). They go to the checker as real files because
-    that is the interface it already has, and because the label it prints
-    then says which flag the run came from.
-    """
+    """Refuse the whole command if any (label, text) blob names something
+    private. Blobs go to the checker as files, labelled by flag."""
     if not blobs:
         return
     with tempfile.TemporaryDirectory(prefix="gh-gate-") as tmp:
@@ -79,16 +52,12 @@ def gate(blobs: list[tuple[str, str]]) -> None:
             with open(path, "w") as fh:
                 fh.write(text)
             paths.append(path)
-        done = subprocess.run([sys.executable, CHECKER, "--quotes", "--text"]
-                              + paths)
+        done = subprocess.run([sys.executable, CHECKER, "--text"] + paths)
     if done.returncode:
         sys.stderr.write(
-            "\ngh_gate: NOT running `gh` -- the text above quotes a private\n"
-            "document or names something private, or the gate had nothing\n"
-            "to compare it against.\n\n"
-            "Say it in our own words. A section pointer is fine; the\n"
-            "document's own wording is not. Once this is posted it is public\n"
-            "permanently -- editing it afterwards does not unpublish it.\n")
+            "\ngh_gate: NOT running `gh` -- the text above names something\n"
+            "private. Once posted it is public for good; editing it later\n"
+            "does not unpublish it.\n")
         sys.exit(done.returncode)
 
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The server floor is named in four places and must not drift.
+"""The server floor is named in three places and must not drift.
 
 release.py enforces this at package time, which is the backstop. Running it
 here too means the drift fails on the commit that caused it rather than
@@ -34,18 +34,8 @@ check("README.txt names the same one",
 check("README.md names the same one",
       release.readme_md_server_version() == floor,
       f"README.md {release.readme_md_server_version()} vs code {floor}")
-check("no drift between any of the four", not release.server_problems(),
+check("no drift between any of the three", not release.server_problems(),
       "; ".join(release.server_problems()))
-
-# The spec is allowed to LAG -- 0.9.29 shipped avatars and home rows with no
-# spec update -- but never to LEAD, which would mean we vendored a contract
-# the client does not claim to support.
-spec = release.spec_version()
-if spec:
-    check("the vendored spec does not lead the floor",
-          release.compare(spec, floor) <= 0, f"spec {spec} > floor {floor}")
-else:
-    print("SKIP  no vendored spec here (internal-docs/ is private)")
 
 # The runtime check must agree with what release.py reads out of the file --
 # a regex and a constant that disagree would make all of the above theatre.

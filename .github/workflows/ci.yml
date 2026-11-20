@@ -5,14 +5,6 @@
 # cairosvg, resvg_py and segno, and regenerating assets is not CI's job --
 # text rasterisation is not byte-identical across platforms, so a runner
 # would "fix" artwork into a diff nobody wants.
-#
-# WHAT IS NOT HERE, and cannot be: the quotation half of check_public_set.
-# It compares this file set against tofa's private documents, which are not
-# in this repository and must never reach a runner. It is run from the
-# private vault, where those documents live. `--markers` needs no sources --
-# its patterns are in the script -- so the identifier sweep does gate here,
-# and that is the check that catches a hostname or an address typed into a
-# comment next year.
 
 name: CI
 
@@ -53,11 +45,8 @@ jobs:
       - name: Settings layout
         run: python3 tools/check_settings_layout.py
 
-      # Static linters over the add-on's own source. They sat in the private
-      # vault until 2026-08-15 for no better reason than being filed with the
-      # live-box probes -- none of them opens a socket or names a machine, and
-      # CONTRIBUTING documents the rules they enforce, so a contributor could
-      # read a rule and had no way to check it.
+      # Static linters over the add-on's own source; CONTRIBUTING documents
+      # the rules they enforce.
       - name: Regional formatting (no hardcoded separators or date formats)
         run: python3 tools/check_numbers.py
 
@@ -74,7 +63,7 @@ jobs:
         run: python3 tools/release.py check
 
       - name: Private identifiers (hostnames, addresses, personal details)
-        run: python3 tools/check_public_set.py --markers
+        run: python3 tools/check_public_set.py
 
       - name: The skin re-renders to exactly what is committed
         run: |

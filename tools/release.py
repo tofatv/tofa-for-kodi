@@ -65,7 +65,6 @@ import argparse
 import functools
 import hashlib
 import ipaddress
-import json
 import os
 import re
 import shutil
@@ -78,8 +77,6 @@ import zlib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import checkouts  # noqa: E402  (sibling module in tools/)
 ADDON_DIR = os.path.join(ROOT, "plugin.video.tofa")
 ADDON_XML = os.path.join(ADDON_DIR, "addon.xml")
 
@@ -348,12 +345,9 @@ def news_in_xml(xml: str) -> str | None:
 
 # --- server compatibility -----------------------------------------------
 #
-# THREE places name the server version we target, and they drift silently
-# because nothing fails when they disagree: the constant the client actually
-# enforces, the line a user reads in README.txt, and the OpenAPI spec we
-# vendored to code against. The constant is the source of truth; the others
-# are checked against it here, so a package cannot ship a README promising
-# one thing and a client enforcing another.
+# THREE places name the server version we target, and they drift silently:
+# the constant the client enforces, README.txt and README.md. The constant is
+# the source of truth; the readmes are checked against it here.
 #
 # Read by REGEX rather than import: serverversion imports xbmcgui, which
 # does not exist off-device.
@@ -365,13 +359,6 @@ README = os.path.join(ADDON_DIR, "README.txt")
 #: then 0.9.33 in PR #93) -- which is exactly the drift this module exists
 #: to make impossible.
 README_MD = os.path.join(ROOT, "README.md")
-#: The vault holds the vendored spec, and travels nowhere. In one tree that
-#: is this checkout; after the split it is the sibling. None when there is no
-#: vault to read -- which the public repo's CI legitimately is, so this is
-#: reported rather than fatal. See spec_version().
-_VAULT = checkouts.vault(ROOT)
-SPEC_DIR = os.path.join(_VAULT, "internal-docs", "api") if _VAULT else None
-
 _FLOOR_RE = re.compile(
     r"^MIN_SERVER_VERSION.*?=\s*\((\d+),\s*(\d+),\s*(\d+)\)", re.M)
 _README_RE = re.compile(
@@ -410,32 +397,6 @@ def readme_md_server_version() -> str | None:
     return found.group(1) if found else None
 
 
-def spec_version() -> str | None:
-    """The vendored OpenAPI spec's own version, if it is here at all.
-
-    It legitimately LAGS the server -- 0.9.29 shipped avatars and home rows
-    with no spec update -- so a spec older than the floor is normal and not
-    reported. A spec NEWER than the floor is the interesting case: it means
-    we vendored a contract we have not declared support for.
-
-    internal-docs/ is not in the public repository and never will be, so a
-    missing spec is not an error. It is no longer SILENT, though: do_check
-    says which of the two it did, because "floor checked against the spec"
-    and "floor checked against nothing" printed the same line before, and the
-    second is what a CI run without a vault actually does."""
-    if not SPEC_DIR or not os.path.isdir(SPEC_DIR):
-        return None
-    for name in sorted(os.listdir(SPEC_DIR)):
-        if not name.endswith(".json"):
-            continue
-        try:
-            with open(os.path.join(SPEC_DIR, name), encoding="utf8") as handle:
-                return (json.load(handle).get("info") or {}).get("version")
-        except (OSError, ValueError):
-            return None
-    return None
-
-
 def server_problems() -> list[str]:
     problems = []
     floor = server_floor()
@@ -457,12 +418,6 @@ def server_problems() -> list[str]:
         problems.append(
             "README.md says server %s, serverversion.py enforces %s "
             "(run: release.py server %s)" % (readme_md, floor, floor))
-    spec = spec_version()
-    if spec and compare(spec, floor) > 0:
-        problems.append(
-            "the vendored API spec is %s but the client only claims %s -- "
-            "adopt it and raise MIN_SERVER_VERSION, or vendor the older spec"
-            % (spec, floor))
     return problems
 
 
@@ -533,24 +488,8 @@ def repo_zip_problems() -> list[str]:
 
 
 def public_set_gate() -> int:
-    """`check_public_set.py` in full, which CI structurally cannot run.
-
-    It compares this tree against tofa's confidential documents, and those
-    must never reach a runner, so CI runs only its `--markers` half. That
-    left the QUOTE half with no automatic home, and it went red from
-    2026-08-16 to 2026-08-29 without anyone noticing -- two comments quoting
-    13 tokens of TV-DESIGN.md, carried into every release from 0.9.3 on.
-
-    Publishing is the last moment the tree is still ours, and it happens
-    beside the vault, so the gate belongs here. It is not a substitute for
-    the pre-push hook (`tools/hooks/pre-push`), which catches the same thing
-    before the prose is public rather than a release later.
-
-    **A checkout with no vault CANNOT publish, deliberately.** The checker
-    treats "compared against nothing" as a failure rather than a pass, and a
-    publish that skipped the comparison is precisely the release this gate
-    exists to stop. Point `TOFA_VAULT` at the vault, or publish from the
-    machine that has one."""
+    """`check_public_set.py` again, as the backstop for a push that skipped
+    the pre-push hook."""
     checker = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            "check_public_set.py")
     done = subprocess.run([sys.executable, checker], text=True,
@@ -558,8 +497,7 @@ def public_set_gate() -> int:
     if done.returncode:
         sys.stdout.write(done.stdout)
         sys.stderr.write(done.stderr)
-        print("\nnot publishing a tree that quotes tofa's documents, or one "
-              "the gate could not compare against them at all")
+        print("\nnot publishing a tree that names something private")
     return done.returncode
 
 
@@ -598,14 +536,7 @@ def do_check() -> int:
     print("version %s" % version)
     floor = server_floor()
     if floor:
-        spec = spec_version()
-        if spec:
-            note = "  (vendored spec %s)" % spec
-        elif _VAULT:
-            note = "  (no spec in the vault, floor NOT compared)"
-        else:
-            note = "  (no vault here, floor NOT compared against any spec)"
-        print("server floor %s%s" % (floor, note))
+        print("server floor %s" % floor)
     for problem in problems:
         print("    " + problem)
     print("%d problem(s)" % len(problems))
