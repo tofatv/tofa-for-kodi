@@ -844,7 +844,7 @@ _INDEX = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>tofa for Kodi — add-on repository</title>
+<title>tofa for Kodi: add-on repository</title>
 <style>
   :root {{ color-scheme: dark light; }}
   body {{ margin: 0; padding: 2.5rem 1.25rem; background: #0b1116; color: #e8eef2;
@@ -877,7 +877,7 @@ _INDEX = """<!doctype html>
         you try.</li>
     <li>Settings → File manager → Add source → paste the address above. Kodi
         cannot guess a name for an <code>https</code> source and will not
-        accept an empty one — call it <strong>tofa</strong>.</li>
+        accept an empty one, so call it <strong>tofa</strong>.</li>
     <li>Settings → Add-ons → Install from zip file → that source →
         <code>{repo_zip}</code></li>
     <li>Install from repository → tofa Add-on Repository → Video add-ons →
