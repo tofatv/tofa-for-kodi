@@ -821,7 +821,7 @@ def _repository_addon_xml(base_url: str) -> bytes:
     return (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
         '<addon id="{id}" name="{name}" version="{version}" '
-        'provider-name="cinemaONE">\n'
+        'provider-name="tofa">\n'
         '  <requires>\n'
         '    <import addon="xbmc.addon" version="12.0.0"/>\n'
         '  </requires>\n'

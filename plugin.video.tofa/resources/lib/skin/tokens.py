@@ -1179,10 +1179,10 @@ SETTINGS_LANG_ROW2_Y = settings_stack_row_y(2)
 SETTINGS_NOTE_CARD_H = 18 + 34 + 4 + 3 * 27 + 18
 SETTINGS_PRIVACY_GROUP_H = SETTINGS_SECTION_BAND + SETTINGS_NOTE_CARD_H + SETTINGS_GROUP_TRAIL
 # ABOUT is not a plain row stack: it leads with a name block ("tofa for Kodi"
-# over the note that this is an unofficial add-on the tofa team still helps
-# with -- agreed with tofa 2026-08-03), which shares ONE card with the Version
-# row beneath it, exactly as Server shares a card with Libraries. Then the
-# Open Source Notices row, which is a real list and keeps its action height.
+# over a two-line credit to the add-on's creator), which shares ONE card with
+# the Version row beneath it, exactly as Server shares a card with Libraries.
+# Then the Open Source Notices row, which is a real list and keeps its action
+# height.
 # Title over summary, on settings_action_row's own measurements (23/34 then
 # 58/28) so this block reads as the same kind of thing as every other
 # two-line row in Settings. A first pass sized the note at FONT_CAPTION,

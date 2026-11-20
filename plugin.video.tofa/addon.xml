@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tofa" name="tofa for Kodi" version="1.5.0" provider-name="cinemaONE">
+<addon id="plugin.video.tofa" name="tofa for Kodi" version="1.5.0" provider-name="tofa">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.31.0"/>
@@ -22,7 +22,7 @@
          SO: adding or changing a font means bumping resource.font.tofa's
          version AND this minversion to match. tests/test_font_resource_addon.py
          fails if they drift. -->
-    <import addon="resource.font.tofa" minversion="1.1.0" version="1.0.0"/>
+    <import addon="resource.font.tofa" minversion="1.1.1" version="1.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -33,14 +33,14 @@
   <extension point="xbmc.service" library="service.py" start="startup"/>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">tofa media server: user interface, plus a browsable video source</summary>
-    <description lang="en_GB">An unofficial client for the tofa media server (tofa.tv), in two parts.
+    <description lang="en_GB">A client for the tofa media server (tofa.tv), in two parts.
 
 Under Programs, tofa opens a full user interface: Home, Browse, Discover, Search, title detail with cast and episodes, its own player chrome, and Settings.
 
 Under Video add-ons, the same library appears as a browsable source, so it can also be used in widgets, favourites and Kodi's own containers.
 
 Both play through Kodi's native VideoPlayer, negotiating DirectPlay/DirectFile so Dolby Vision, TrueHD/DTS-HD passthrough and refresh-rate matching reach it untouched.</description>
-    <disclaimer lang="en_GB">An unofficial tofa client, engineered with the tofa team, who also help support it.</disclaimer>
+    <disclaimer lang="en_GB">Created by community member cinemaONE and donated to tofa.</disclaimer>
     <platform>all</platform>
     <license>GPL-2.0-only</license>
     <website>https://tofa.tv</website>
