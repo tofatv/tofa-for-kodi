@@ -1,3 +1,8 @@
+1.5.1
+- tofa for Kodi is now published by tofa. It was created by community
+  member cinemaONE, who donated it to tofa: thank you.
+- Updates now come from https://kodi.tofa.tv.
+
 1.5.0
 - Home can add a Ready to binge row: whole seasons you can start from the
   beginning. Its cards open on that season.
