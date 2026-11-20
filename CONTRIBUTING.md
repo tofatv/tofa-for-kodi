@@ -22,48 +22,30 @@ to 65, since a title becomes the squash subject.
 
 ## Nothing becomes public except through a tool that gated it
 
-That is the whole rule, and it has two halves because GitHub has two doors.
+GitHub has two doors, and each has a gate.
 
-**Through git** -- the working tree, commit messages, annotated tag messages.
-The `core.hooksPath` line above installs a pre-push hook running
-`check_public_set.py` in full, about a second and a half. git hands the hook
-the exact refs it is about to send and what the remote already has, so it
-checks exactly the commits being pushed.
+**Through git**: the working tree and commit messages. The `core.hooksPath`
+line above installs a pre-push hook that runs `check_public_set.py` and
+`check_brevity.py` over exactly the commits being pushed.
+`check_public_set.py` sweeps for private identifiers: IPv4 literals not on
+its allowlist, MAC addresses, home-directory paths and a personal email
+domain. CI and `release.py publish` run it too.
 
-**Through the GitHub API** -- a pull request title or body, an issue, a
-comment, a release note. None of those pass through git, so the hook never
-sees them. Use `tools/gh_gate.py` in place of `gh`:
+**Through the GitHub API**: a pull request title or body, an issue, a
+comment, a release note. The hook never sees those, so use
+`tools/gh_gate.py` in place of `gh`:
 
     python3 tools/gh_gate.py pr create --title "..." --body-file body.md
     python3 tools/gh_gate.py pr merge 189 --squash --delete-branch
     python3 tools/gh_gate.py issue comment 161 --body-file evidence.md
 
-Everything after the script name goes to `gh` unchanged; what happens first
-is that every piece of text in it is gated, and a hit stops the command
-before anything reaches GitHub. A squash merge is the one command with no
-text of its own -- GitHub composes the message on the server -- so the
-wrapper composes it locally, gates it, and passes it back with `--subject`
-and `--body`, which makes the server compose nothing.
+Everything after the script name goes to `gh` unchanged, after its text has
+been gated. A squash merge has no text of its own, so the wrapper composes
+the message locally, gates it, and passes it with `--subject` and `--body`.
 
-CI cannot do any of this: the gate compares against tofa's confidential
-documents, which must never reach a runner, so the workflow runs `--markers`
-alone. `tests/test_publication_gate.py` covers the mechanism with a synthetic
-private source, so the behaviour is tested everywhere even though the real
-check can only run here. `release.py publish` runs the gate again as a
-backstop.
-
-**Why the rule is absolute rather than a habit of being careful.** Twice now
-the careful habit has failed, and the second failure is the one that settled
-it. On 2026-08-16 two comments quoting 13 tokens of the design document
-shipped in every release from 0.9.3 on, unnoticed for a fortnight, because a
-manual check is one nobody runs. On 2026-09-20 the tree gate did catch two
-sentences -- and `git commit --amend --no-edit`, which keeps the original
-message, carried them into a merged commit the gate had no reason to read.
-Rewriting the history afterwards cleaned `main` and nothing else: GitHub went
-on serving the orphaned commit by SHA, and `refs/pull/N/head` went on
-rendering it on the pull request's Commits tab. **A rewrite pays the full
-cost and removes nothing.** Before the write is not the cheapest moment; it
-is the only one.
+The rule is absolute because a public surface cannot be taken back: a
+rewritten commit stays reachable on GitHub by SHA and on the pull request's
+Commits tab. Before the write is the only moment that counts.
 
 `check_xml.py` exists because each thing it catches is a SILENT failure: Kodi
 does not reject them, log them, or draw anything that looks like an error --
@@ -94,49 +76,20 @@ Close the window, or restart Kodi, before believing a change did nothing.
 
 Comments across the code cite a design document by section ("9.4's fox tile")
 and sometimes a reference capture (`internal-docs/atv-reference/*.png`).
-**`internal-docs/` is a private sibling checkout and is not distributed.**
-The tools that need it find that checkout by content rather than by name --
-see `tools/checkouts.py`, and `TOFA_VAULT` if yours lives somewhere
-unguessable. Without one, `check_public_set.py` refuses to pass rather than
-reporting a clean run it never performed.
-tofa's TV design document and our captures of the shipped apps are
-confidential; the section numbers stay because they are what makes the code
-navigable, and they are opaque on their own.
-
-What may not travel is a private document's own prose -- the design document,
-the vendored OpenAPI spec, or the API guide beside it.
-`tools/check_public_set.py` enforces it: it indexes every 8-word run of each
-source and slides the same window over everything in this repository, so a
-comment that reproduces a sentence is caught rather than noticed. Since
-2026-09-20 it slides that window over recent commit messages as well: a
-message is as published as a file and cannot be edited afterwards, and
-`git commit --amend --no-edit` keeps the original one, so paraphrasing a
-comment the gate caught does not touch the message it already went out in.
-It sweeps for private identifiers in the same pass -- hostnames, addresses,
-personal details -- with IPv4 literals checked against an allowlist, since
-the address that matters is the one nobody has typed yet.
-
-Without the private checkout it has nothing to compare quotations against and
-says so; the identifier half still runs, and is the half that matters here.
+Those are tofa's private design material and are not in this repository; the
+pointers stay because they make the code navigable, and they are opaque on
+their own.
 
 **Do not quote those documents, at any length.** Cite the section and say
 what it requires in your own words: `8.4 caps the scroll at 460pt`, never
-`8.4 says "max scroll 460pt"`. The checker's second half enforces it -- any
-three-word phrase a comment puts in quotation marks that also appears in one
-of tofa's documents fails the run. The eight-token half cannot see these; a
-design instruction is four words and a number, which is how quoted spec
-lines accumulated across the tree unnoticed until 2026-08-29.
-
-Text the app puts on screen is not a quotation of theirs -- a comment has to
-be able to name the row it is about -- and `QUOTED_ON_SCREEN` in the checker
-lists those by name. Add to it deliberately, or not at all.
+`8.4 says "max scroll 460pt"`. Text the app puts on screen is not a
+quotation, so a comment may still name the row it is about.
 
 Where this client knowingly does something other than the spec or the shipped
-apps, record it in the private `internal-docs/DIVERGENCES.md` as well as at
-the code. Three reasons recur and are worth naming: **Kodi cannot** (a
+apps, say so at the code, with the reason. Three recur: **Kodi cannot** (a
 platform limit, not a choice), **measured against the app** (the spec is
 stated at another density or predates the app, and the app wins), and
-**approved** (agreed with tofa or the repo owner).
+**approved** (agreed with tofa).
 
 ## For the tofa team: graphical assets
 
@@ -313,15 +266,8 @@ should not recur -- but the tags from before that guard need reading this way.
 ### The server version floor
 
 `tools/release.py server <v>` sets `MIN_SERVER_VERSION` and the requirement
-line in `plugin.video.tofa/README.txt` together, and `release.py check`
-compares both against the vendored OpenAPI spec next door. The rule the check
-enforces: **the vendored spec may LAG the floor but never LEAD it** -- a spec
-newer than the version the client claims means holding a contract we do not
-say we support, and `do_package()` refuses to build while it fails.
-
-**The tool does NOT touch the top-level `README.md`**, which states the same
-requirement in prose, and `check` does not compare it either -- so it drifts
-silently. Update it by hand after every bump.
+lines in `plugin.video.tofa/README.txt` and `README.md` together, and
+`release.py check` fails while any of the three disagree.
 
 Bump the floor **with the feature that needs it, in the same commit**, and
 remember the changelog: a floor bump is user-visible.
