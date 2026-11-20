@@ -1,7 +1,7 @@
 # Support
 
 Problems, questions and bug reports all go to the
-[issue tracker](https://github.com/cinema-ONE/tofa-for-kodi/issues). Please say
+[issue tracker](https://github.com/tofatv/tofa-for-kodi/issues). Please say
 which version of the add-on and of Kodi you are on, and which platform -- the
 add-on version is under Settings → Add-ons → My add-ons → Video add-ons →
 **tofa for Kodi**.
@@ -73,7 +73,7 @@ again until the set changes.
 
 Once a version is four releases old it leaves the repository. If you need one
 older than that, every release from 0.9.2 onwards has its zip attached at
-https://github.com/cinema-ONE/tofa-for-kodi/releases -- install that with
+https://github.com/tofatv/tofa-for-kodi/releases -- install that with
 **Install from zip file** below.
 
 ### Install a version directly

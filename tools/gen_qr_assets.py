@@ -50,9 +50,9 @@ QR_URLS: dict[str, str] = {
     # issue tracker of the repository the add-on is built from. Account and
     # server problems still belong to tofa, which is what the caption says.
     #
-    # 50 bytes against version 6's 58-byte budget at error correction H, so
+    # 46 bytes against version 6's 58-byte budget at error correction H, so
     # the card keeps the measured geometry below rather than growing a version.
-    "support": "https://github.com/cinema-ONE/tofa-for-kodi/issues",
+    "support": "https://github.com/tofatv/tofa-for-kodi/issues",
 }
 
 # See the module docstring -- every one of these is measured, not chosen.

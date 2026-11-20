@@ -994,7 +994,7 @@ _INDEX = """<!doctype html>
 
 #: Where a human goes from that page. Not derived from BASE_URL: the channel
 #: and the source repository are different things and may not stay on one host.
-PROJECT_URL = "https://github.com/cinema-ONE/tofa-for-kodi"
+PROJECT_URL = "https://github.com/tofatv/tofa-for-kodi"
 
 
 def _write_index(out_dir: str, base_url: str, version: str) -> None:
