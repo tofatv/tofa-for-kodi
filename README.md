@@ -24,11 +24,11 @@ Add the repository once and Kodi keeps the add-on updated on its own:
 
 1. Settings → System → Add-ons → turn on **Unknown sources**. Kodi refuses
    to install from a zip without it, and only says so when you try.
-2. Settings → File manager → Add source → `https://tofa.cinemaone.ch`
+2. Settings → File manager → Add source → `https://kodi.tofa.tv`
    Kodi cannot guess a name for an `https` source and will not accept an
    empty one — call it **tofa**.
 3. Settings → Add-ons → Install from zip file → **tofa** →
-   `repository.tofa-1.0.1.zip`
+   `repository.tofa-1.0.2.zip`
 4. Install from repository → tofa Add-on Repository → Video add-ons →
    **tofa for Kodi**
 5. Start it from Kodi's **home menu → Add-ons → Program add-ons →

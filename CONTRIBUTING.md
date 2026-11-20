@@ -249,7 +249,7 @@ box.
 
 `publish` builds `dist/repo/` and reads it back the way Kodi will, reporting
 what would break. Copy that tree into `docs/` on `main` and GitHub Pages
-serves it at `https://tofa.cinemaone.ch`, which is `release.py`'s `BASE_URL`.
+serves it at `https://kodi.tofa.tv`, which is `release.py`'s `BASE_URL`.
 
 **`rm -rf dist/repo` first.** `publish` creates its output directory but
 never clears it, so the previous version's zip is still sitting there from
@@ -264,11 +264,11 @@ already-published version for nothing. Restore both copies and the `.sha256`
 from `HEAD` before committing. This is the same rule `publish` enforces for
 the add-on when it refuses to republish a version whose contents changed.
 
-That hostname is a DNS `CNAME` onto `cinema-one.github.io`; the bits still
+That hostname is a DNS `CNAME` onto `tofatv.github.io`; the bits still
 come from Pages out of `docs/`. What binds the name to THIS repository is the
 `CNAME` file in the served tree, which `publish` writes from `BASE_URL` --
 Pages cannot tell repos apart by DNS, since every custom subdomain points at
-the same `cinema-one.github.io`. Publishing a tree without that file unbinds
+the same `tofatv.github.io`. Publishing a tree without that file unbinds
 the domain and takes the channel down for every install, so `publish` refuses
 to call a tree good if it is missing or names another host.
 
@@ -276,7 +276,7 @@ That URL is baked into the repository add-on users install, so changing it
 means every existing user has to remove and re-add the repository. If it ever
 does change, bump `REPO_VERSION` in the same commit: existing installs update
 themselves from the OLD url, so a URL change reaches them exactly once, and
-only if the version moved.
+only if the version moved and the old url still serves that release.
 
 ### Development increments vs versions that ship
 
