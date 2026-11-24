@@ -386,7 +386,7 @@ class MediaServerClient:
         if self._image_token and time.time() < self._image_token_expires_at - 60:
             return self._image_token
 
-        cached = None if self.household_identity else auth.load_cached_image_token()
+        cached = None if self.household_identity else auth.load_cached_image_token(self.profile_id)
         if cached:
             token, expires_at = cached
             if time.time() < expires_at - 60:
@@ -397,7 +397,7 @@ class MediaServerClient:
         self._image_token = granted["token"]
         self._image_token_expires_at = time.time() + granted["expires_in"]
         if not self.household_identity:
-            auth.save_image_token(self._image_token, self._image_token_expires_at)
+            auth.save_image_token(self._image_token, self._image_token_expires_at, self.profile_id)
         return self._image_token
 
     def resolve_image_url(self, path: Optional[str]) -> Optional[str]:

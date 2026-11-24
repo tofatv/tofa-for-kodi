@@ -261,9 +261,11 @@ def _delete_image_token() -> None:
         xbmcvfs.delete(image_path)
 
 
-def load_cached_image_token() -> tuple[str, float] | None:
-    """(token, expires_at) from disk, or None if there's no cached one.
-    Doesn't check expiry itself -- the caller (api.py) decides the margin."""
+def load_cached_image_token(profile_id: str | None = None) -> tuple[str, float] | None:
+    """(token, expires_at) from disk, or None if there's no cached one for
+    `profile_id`. A mint that finished after a switch can write the old
+    profile's token back, so the file names its profile. Doesn't check
+    expiry itself -- the caller (api.py) decides the margin."""
     path = _image_token_file_path()
     if not xbmcvfs.exists(path):
         return None
@@ -274,12 +276,14 @@ def load_cached_image_token() -> tuple[str, float] | None:
         f.close()
     try:
         data = json.loads(raw)
+        if data.get("profile_id", None) != (profile_id or ""):
+            return None
         return data["token"], data["expires_at"]
-    except (ValueError, KeyError, TypeError):
+    except (ValueError, KeyError, TypeError, AttributeError):
         return None
 
 
-def save_image_token(token: str, expires_at: float) -> None:
+def save_image_token(token: str, expires_at: float, profile_id: str | None = None) -> None:
     """Persisted across addon.py invocations -- each plugin action is a
     fresh process, so an in-memory-only cache never survives to the next
     listing. The server keeps this token byte-stable for an hour so art
@@ -287,7 +291,8 @@ def save_image_token(token: str, expires_at: float) -> None:
     token and URL for the same image, and Kodi's URL-keyed texture cache
     never hits."""
     path = _image_token_file_path()
-    atomicwrite.write_json(path, {"token": token, "expires_at": expires_at})
+    atomicwrite.write_json(path, {"token": token, "expires_at": expires_at,
+                                  "profile_id": profile_id or ""})
     # Lower sensitivity than tokens.json (image-scoped, cache-GET only per
     # the endpoint's own description) but free to protect the same way.
     try:
