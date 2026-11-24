@@ -252,7 +252,7 @@ def sign_out() -> None:
 
 def _delete_image_token() -> None:
     """Drop the cached image token. It is minted by, and only valid against,
-    ONE server for ONE account (JWT `sub`), so it has to go whenever either
+    ONE server for ONE account and profile, so it has to go whenever any
     changes -- otherwise the next screen's art briefly loads with a token the
     new server has never heard of, and the posters come back blank until it
     expires."""
@@ -482,6 +482,8 @@ def save_profile_selection(profile_id: str, profile_token: str | None, profile_t
             profile_token=profile_token,
             profile_token_expires_at=profile_token_expires_at,
         ))
+    # The image token carries the profile it was minted for.
+    _delete_image_token()
 
 
 def clear_profile_selection() -> None:
@@ -491,6 +493,7 @@ def clear_profile_selection() -> None:
         tok = load()
         save(dataclasses.replace(tok, profile_id=None, profile_token=None,
                                  profile_token_expires_at=None))
+    _delete_image_token()
 
 
 def save_rotated_profile_token(profile_token: str,
